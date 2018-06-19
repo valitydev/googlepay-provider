@@ -2,11 +2,17 @@ package com.rbkmoney.provider.googlepay.config;
 
 import com.google.crypto.tink.apps.paymentmethodtoken.GooglePaymentsPublicKeysManager;
 import com.google.crypto.tink.apps.paymentmethodtoken.PaymentMethodTokenRecipient;
+import com.rbkmoney.damsel.base.InvalidRequest;
 import com.rbkmoney.damsel.payment_tool_provider.PaymentToolProviderSrv;
+import com.rbkmoney.damsel.payment_tool_provider.UnwrappedPaymentTool;
+import com.rbkmoney.damsel.payment_tool_provider.WrappedPaymentTool;
+import com.rbkmoney.provider.googlepay.iface.decrypt.HandlerSelector;
 import com.rbkmoney.provider.googlepay.iface.decrypt.ProviderHandler;
 import com.rbkmoney.provider.googlepay.service.DecryptionService;
 import com.rbkmoney.provider.googlepay.service.GPKeyStore;
 import com.rbkmoney.provider.googlepay.service.ValidationService;
+import org.apache.thrift.TException;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,21 +28,41 @@ import java.security.GeneralSecurityException;
 public class AppConfig {
 
     @Bean
-    public DecryptionService decryptionService(@Value("${google.test}") boolean testMode, @Value("${google.gateway_id}") String gatewayId, @Value("${google.keys_path}")Resource keys) throws GeneralSecurityException, IOException {
+    public DecryptionService testDecryptionService(@Value("${google.gateway_id}") String gatewayId, @Value("${google.test_keys_path}")Resource keys) throws GeneralSecurityException, IOException {
 
         PaymentMethodTokenRecipient.Builder builder = new PaymentMethodTokenRecipient.Builder();
-        builder.fetchSenderVerifyingKeysWith(
-                testMode ? GooglePaymentsPublicKeysManager.INSTANCE_TEST : GooglePaymentsPublicKeysManager.INSTANCE_PRODUCTION)
+        builder.fetchSenderVerifyingKeysWith(GooglePaymentsPublicKeysManager.INSTANCE_TEST)
         .recipientId("gateway:"+gatewayId);
         for (String key: new GPKeyStore(keys.getURI()).getKeys()) {
             builder.addRecipientPrivateKey(key);
         }
-
         return new DecryptionService(builder.build());
     }
 
     @Bean
-    public PaymentToolProviderSrv.Iface decryptHandler(DecryptionService decryptionService, @Value("${google.use_validation}") boolean enableValidation) {
+    public DecryptionService prodDecryptionService(@Value("${google.gateway_id}") String gatewayId, @Value("${google.prod_keys_path}")Resource keys) throws GeneralSecurityException, IOException {
+
+        PaymentMethodTokenRecipient.Builder builder = new PaymentMethodTokenRecipient.Builder();
+        builder.fetchSenderVerifyingKeysWith(GooglePaymentsPublicKeysManager.INSTANCE_PRODUCTION)
+                .recipientId("gateway:"+gatewayId);
+        for (String key: new GPKeyStore(keys.getURI()).getKeys()) {
+            builder.addRecipientPrivateKey(key);
+        }
+        return new DecryptionService(builder.build());
+    }
+
+    @Bean
+    public PaymentToolProviderSrv.Iface testDecryptHandler(@Qualifier("testDecryptionService") DecryptionService decryptionService, @Value("${google.use_validation}") boolean enableValidation) {
         return new ProviderHandler(new ValidationService(), decryptionService, enableValidation);
+    }
+
+    @Bean
+    public PaymentToolProviderSrv.Iface prodDecryptHandler(@Qualifier("prodDecryptionService") DecryptionService decryptionService, @Value("${google.use_validation}") boolean enableValidation) {
+        return new ProviderHandler(new ValidationService(), decryptionService, enableValidation);
+    }
+
+    @Bean
+    public PaymentToolProviderSrv.Iface decryptHandler(@Qualifier("testDecryptHandler") PaymentToolProviderSrv.Iface testHandler, @Qualifier("prodDecryptHandler") PaymentToolProviderSrv.Iface prodHandler, @Value("${google.test_merchant_id_pattern}") String testPatternStr) {
+        return new HandlerSelector(testHandler, prodHandler, testPatternStr);
     }
 }

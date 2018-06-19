@@ -20,14 +20,14 @@ public class DataTest {
         GooglePaymentsPublicKeysManager.INSTANCE_TEST.refreshInBackground();
     }
 
-    @org.junit.Test
+    @org.junit.Test(expected = GeneralSecurityException.class)
     public void test() throws GeneralSecurityException, IOException, URISyntaxException {
         String paymentMethodToken = "{\"signature\":\"MEUCIQDiT2/dI+H7LiiP0Yu/p8Z62Laumnk/js9cQrTUpYufIAIgN+e3tDoBDnqk6pt+MEwsVWD3oq/DfbbcLPJgdo3AMfM\\u003d\",\"protocolVersion\":\"ECv1\",\"signedMessage\":\"{\\\"encryptedMessage\\\":\\\"k84ZAjkWfAibZmWxJfBJ8+3lhNiVvPrMYvLsZQwSt5dEmvO1S7davQ5rq04MNLKjwRezz301L6kDxv6abe2M7Z2KIM/tlmgtsAlV2xbOxS2piChvEeB0RyVbAxjLKfL5vnOlxivLgoPbCUrm7/hSwxsPhjVvyTXMCBbo744ZnIINuk8W3aROtFnGBqdzWSEjmlrhUBHoTJ1IEMuowoklUyI2Qd8pCQHA4it8mvITPE/KDQNt4J4HmNAx1GkW/Va9SEHZXP/J5xNjFeijshDZgd9oam1JB2yg3sgIh3e2JmgkVChqHoilaEdjKTLJc95FlJfbZyxytmh4E7jxvJ//vB5ySGV1pyVVRT8IX6K2oIXjsJ+JAZQmr7/MNo7W/cq6guz07nFHMqk8FCJbsWA75krj4Y9Ls8QkDyI7ccayapE2N9/QP5koLglASxWFfUEgWyWPWA\\\\u003d\\\\u003d\\\",\\\"ephemeralPublicKey\\\":\\\"BLhY0C4bLP+Cv6AKH7Hz2YKICO2QqFZYxFDOWZ07S0LfEAwCmiusTIW/gz377AveU3Fw5JNKZPNjHkBG4OkEnKk\\\\u003d\\\",\\\"tag\\\":\\\"JvdgTyndj5fDugbG3rEoN52adgA/x24aGmRAKyoqxrk\\\\u003d\\\"}\"}";
         PaymentMethodTokenRecipient.Builder builder = new PaymentMethodTokenRecipient.Builder();
         builder.fetchSenderVerifyingKeysWith(
                 GooglePaymentsPublicKeysManager.INSTANCE_TEST)
                 .recipientId("gateway:rbkmoney");
-        for (String key: new GPKeyStore(this.getClass().getClassLoader().getResource("keys.txt").toURI()).getKeys()) {
+        for (String key: new GPKeyStore(this.getClass().getClassLoader().getResource("test_keys.txt").toURI()).getKeys()) {
             builder.addRecipientPrivateKey(key);
         }
         String decryptedMessage = builder.build()
