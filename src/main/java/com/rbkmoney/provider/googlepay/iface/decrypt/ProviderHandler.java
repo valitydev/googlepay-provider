@@ -42,12 +42,7 @@ public class ProviderHandler implements PaymentToolProviderSrv.Iface {
 
     @Override
     public UnwrappedPaymentTool unwrap(WrappedPaymentTool payment_tool) throws InvalidRequest, TException {
-        log.info("New unwrap request: {}", payment_tool);
         Content content = payment_tool.getRequest().getGoogle().getPaymentToken();
-        if (!content.getType().equalsIgnoreCase("application/json")) {
-            throw new InvalidRequest(Arrays.asList("Wrong content type"));
-        }
-
         try {
             PaymentData paymentData = srcReader.readValue(content.getData());
             PaymentToken paymentToken = paymentData.getPaymentMethodToken();
@@ -67,14 +62,6 @@ public class ProviderHandler implements PaymentToolProviderSrv.Iface {
             result.setCardInfo(extractCardInfo(paymentData.getCardInfo()));
             result.setPaymentData(extractPaymentData(decryptedMessage));
             result.setDetails(extractPaymentDetails(decryptedMessage));
-
-            UnwrappedPaymentTool logResult = new UnwrappedPaymentTool(result);
-            if (logResult.getPaymentData().isSetCard()) {
-                logResult.getPaymentData().setCard(new Card());
-            } else {
-                logResult.getPaymentData().setTokenizedCard(new TokenizedCard());
-            }
-            log.info("Unwrap partial result: {}", logResult);
             return result;
         } catch (IOException e) {
             log.error("Failed to read json data: {}", filterPan(e.getMessage()));
@@ -84,7 +71,7 @@ public class ProviderHandler implements PaymentToolProviderSrv.Iface {
             throw new InvalidRequest(Arrays.asList(e.getMessage()));
         } catch (CryptoException e) {
             log.error("Decryption error", e);
-            throw new RuntimeException(e);
+            throw new InvalidRequest(Arrays.asList(e.getMessage()));
         }
     }
 
