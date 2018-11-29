@@ -43,7 +43,7 @@ public class Auth3DS extends Auth {
     public String toString() {
         return "Auth3DS{" +
                 "cryptogram='" + (cryptogram == null ? null : "***") + '\'' +
-                ", eci='" + (eci == null ? null : "***") + '\'' +
+                ", eci='" + eci + '\'' +
                 "}";
     }
 }
