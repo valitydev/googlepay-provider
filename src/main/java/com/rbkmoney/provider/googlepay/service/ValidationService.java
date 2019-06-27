@@ -4,9 +4,6 @@ import com.rbkmoney.provider.googlepay.domain.DecryptedMessage;
 
 import java.time.Instant;
 
-/**
- * Created by vpankrashkin on 29.05.18.
- */
 public class ValidationService {
     public void validate(String gMerchantId, DecryptedMessage message) throws ValidationException {
         if (!gMerchantId.equals(message.getGatewayMerchantId())) {
@@ -14,7 +11,7 @@ public class ValidationService {
         }
 
         if (Instant.now().isAfter(message.getExpiration())) {
-            throw new ValidationException("Message expired: "+message.getExpiration());
+            throw new ValidationException("Message expired: " + message.getExpiration());
         }
     }
 }

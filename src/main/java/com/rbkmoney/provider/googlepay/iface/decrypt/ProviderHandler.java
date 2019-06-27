@@ -14,31 +14,23 @@ import com.rbkmoney.provider.googlepay.service.CryptoException;
 import com.rbkmoney.provider.googlepay.service.DecryptionService;
 import com.rbkmoney.provider.googlepay.service.ValidationException;
 import com.rbkmoney.provider.googlepay.service.ValidationService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.thrift.TException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
-/**
- * Created by vpankrashkin on 03.04.18.
- */
+@Slf4j
+@RequiredArgsConstructor
 public class ProviderHandler implements PaymentToolProviderSrv.Iface {
-    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
     private final ValidationService validator;
     private final DecryptionService decryptor;
     private final ObjectReader srcReader = new ObjectMapper().readerFor(PaymentData.class);
     private final ObjectReader resReader = new ObjectMapper().readerFor(DecryptedMessage.class);
     private final boolean enableValidation;
-
-    public ProviderHandler(ValidationService validator, DecryptionService decryptor, boolean enableValidation) {
-        this.validator = validator;
-        this.decryptor = decryptor;
-        this.enableValidation = enableValidation;
-    }
 
     @Override
     public UnwrappedPaymentTool unwrap(WrappedPaymentTool payment_tool) throws InvalidRequest, TException {

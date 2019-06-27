@@ -7,21 +7,24 @@
     <parent>
         <groupId>com.rbkmoney</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.1.RELEASE</version>
+        <version>2.1.1.RELEASE</version>
     </parent>
 
     <groupId>com.rbkmoney.provider</groupId>
     <artifactId>googlepay</artifactId>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.5-SNAPSHOT</version>
+    <name>provider-googlepay</name>
 
     <properties>
-        <project.maintainer>Vladimir Pankrashkin &lt;v.pankrashkin@rbkmoney.com&gt;</project.maintainer>
+        <project.maintainer>Pavel Popov &lt;p.popov@rbkmoney.com&gt;</project.maintainer>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <dockerfile.base.service.tag>22c57470c4fc47161894f036b7cf9d70f42b75f5</dockerfile.base.service.tag>
+        <dockerfile.base.service.tag>c0d0900ec19c907d866f8360031a836049985110</dockerfile.base.service.tag>
+        <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
         <damsel.version>1.236-1510cd7</damsel.version>
-        <shared.resources.version>0.3.2</shared.resources.version>
+        <shared.resources.version>0.3.6</shared.resources.version>
         <server.port>8022</server.port>
         <exposed.ports>${server.port}</exposed.ports>
+        <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
     </properties>
 
     <dependencies>
@@ -50,6 +53,11 @@
             <groupId>com.rbkmoney</groupId>
             <artifactId>shared-resources</artifactId>
             <version>${shared.resources.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.rbkmoney</groupId>
+            <artifactId>spring-boot-starter-metrics-statsd</artifactId>
+            <version>1.1.0</version>
         </dependency>
         <!--Thridparty libs-->
         <dependency>
@@ -94,6 +102,11 @@
                     <artifactId>hibernate-validator</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.4</version>
         </dependency>
 
         <!--Test libs-->
@@ -183,6 +196,23 @@
                 <configuration>
                     <argLine>-Dfile.encoding=${project.build.sourceEncoding}</argLine>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.2</version>
+                <configuration>
+                    <destFile>${sonar.jacoco.reportPath}</destFile>
+                    <append>true</append>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

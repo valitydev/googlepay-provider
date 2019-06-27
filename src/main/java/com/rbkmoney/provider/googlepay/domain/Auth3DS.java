@@ -3,12 +3,16 @@ package com.rbkmoney.provider.googlepay.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
+@Getter
+@NoArgsConstructor
+@ToString(exclude = "cryptogram")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Auth3DS extends Auth {
+
     private String cryptogram;
     private String eci;
 
@@ -20,30 +24,4 @@ public class Auth3DS extends Auth {
         this.eci = eci;
     }
 
-    public Auth3DS() {
-    }
-
-    public String getCryptogram() {
-        return cryptogram;
-    }
-
-    public void setCryptogram(String cryptogram) {
-        this.cryptogram = cryptogram;
-    }
-
-    public String getEci() {
-        return eci;
-    }
-
-    public void setEci(String eci) {
-        this.eci = eci;
-    }
-
-    @Override
-    public String toString() {
-        return "Auth3DS{" +
-                "cryptogram='" + (cryptogram == null ? null : "***") + '\'' +
-                ", eci='" + eci + '\'' +
-                "}";
-    }
 }

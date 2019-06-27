@@ -3,12 +3,16 @@ package com.rbkmoney.provider.googlepay.domain;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
+@Getter
+@ToString
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PaymentData {
+
     private CardInfo cardInfo;
     private PaymentToken paymentMethodToken;
 
@@ -20,30 +24,4 @@ public class PaymentData {
         this.cardInfo = cardInfo;
     }
 
-    public PaymentData() {
-    }
-
-    public PaymentToken getPaymentMethodToken() {
-        return paymentMethodToken;
-    }
-
-    public void setPaymentMethodToken(PaymentToken paymentMethodToken) {
-        this.paymentMethodToken = paymentMethodToken;
-    }
-
-    public CardInfo getCardInfo() {
-        return cardInfo;
-    }
-
-    public void setCardInfo(CardInfo cardInfo) {
-        this.cardInfo = cardInfo;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentData{" +
-                "cardInfo=" + cardInfo +
-                ", paymentMethodToken=" + paymentMethodToken +
-                '}';
-    }
 }

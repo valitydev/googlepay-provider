@@ -13,9 +13,6 @@ import com.rbkmoney.provider.googlepay.domain.TokenizedCard;
 
 import java.io.IOException;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
 public class TokenizedCardDeserializer extends JsonDeserializer<TokenizedCard> {
     private final ObjectMapper mapper;
 

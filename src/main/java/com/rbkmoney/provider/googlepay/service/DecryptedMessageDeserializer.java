@@ -16,9 +16,6 @@ import com.rbkmoney.provider.googlepay.domain.TokenizedCard;
 
 import java.io.IOException;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
 public class DecryptedMessageDeserializer extends StdDeserializer<DecryptedMessage> {
     private final ObjectMapper mapper;
 

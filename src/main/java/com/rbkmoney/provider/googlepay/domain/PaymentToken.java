@@ -2,11 +2,15 @@ package com.rbkmoney.provider.googlepay.domain;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
+@Getter
+@ToString
+@NoArgsConstructor
 public class PaymentToken {
+
     private String token;
     private TokenizationType tokenizationType;
 
@@ -18,30 +22,4 @@ public class PaymentToken {
         this.token = token;
     }
 
-    public PaymentToken() {
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public TokenizationType getTokenizationType() {
-        return tokenizationType;
-    }
-
-    public void setTokenizationType(TokenizationType tokenizationType) {
-        this.tokenizationType = tokenizationType;
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentToken{" +
-                "token='" + token + '\'' +
-                ", tokenizationType=" + tokenizationType +
-                '}';
-    }
 }

@@ -1,8 +1,5 @@
 package com.rbkmoney.provider.googlepay.service;
 
-/**
- * Created by vpankrashkin on 12.04.18.
- */
 public class CryptoException extends Exception {
     public CryptoException() {
     }

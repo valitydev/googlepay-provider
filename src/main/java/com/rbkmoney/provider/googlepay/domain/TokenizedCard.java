@@ -5,13 +5,19 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.rbkmoney.provider.googlepay.service.TokenizedCardDeserializer;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-/**
- * Created by vpankrashkin on 28.05.18.
- */
+@Getter
+@Setter
+@NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = TokenizedCardDeserializer.class)
+@ToString(exclude = {"dpan", "expirationMonth", "expirationYear"})
 public class TokenizedCard extends PaymentCredential {
+
     private String dpan;
     private int expirationMonth;
     private int expirationYear;
@@ -30,57 +36,4 @@ public class TokenizedCard extends PaymentCredential {
         this.authType = authType;
     }
 
-    public TokenizedCard() {
-    }
-
-    public String getDpan() {
-        return dpan;
-    }
-
-    public void setDpan(String dpan) {
-        this.dpan = dpan;
-    }
-
-    public int getExpirationMonth() {
-        return expirationMonth;
-    }
-
-    public void setExpirationMonth(int expirationMonth) {
-        this.expirationMonth = expirationMonth;
-    }
-
-    public int getExpirationYear() {
-        return expirationYear;
-    }
-
-    public void setExpirationYear(int expirationYear) {
-        this.expirationYear = expirationYear;
-    }
-
-    public AuthType getAuthType() {
-        return authType;
-    }
-
-    public void setAuthType(AuthType authType) {
-        this.authType = authType;
-    }
-
-    public Auth getAuth() {
-        return auth;
-    }
-
-    public void setAuth(Auth auth) {
-        this.auth = auth;
-    }
-
-    @Override
-    public String toString() {
-        return "TokenizedCard{" +
-                "dpan='" + (dpan == null ? null : "***") + '\'' +
-                ", expirationMonth=" + "**" +
-                ", expirationYear=" + "****" +
-                ", authType=" + authType +
-                ", auth=" + auth +
-                "} ";
-    }
 }

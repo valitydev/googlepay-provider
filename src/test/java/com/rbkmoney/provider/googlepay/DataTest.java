@@ -11,9 +11,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.security.GeneralSecurityException;
 
-/**
- * Created by vpankrashkin on 25.05.18.Ø
- */
 public class DataTest {
 
     static {
