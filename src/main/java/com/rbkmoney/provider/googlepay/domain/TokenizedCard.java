@@ -12,14 +12,17 @@ import lombok.ToString;
 
 @Getter
 @Setter
+@ToString
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonDeserialize(using = TokenizedCardDeserializer.class)
-@ToString(exclude = {"dpan", "expirationMonth", "expirationYear"})
 public class TokenizedCard extends PaymentCredential {
 
+    @ToString.Exclude
     private String dpan;
+    @ToString.Exclude
     private int expirationMonth;
+    @ToString.Exclude
     private int expirationYear;
     private AuthType authType;
     private Auth auth;

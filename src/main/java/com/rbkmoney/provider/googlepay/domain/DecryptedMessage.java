@@ -24,6 +24,7 @@ public class DecryptedMessage {
     private String gatewayMerchantId;
     private PaymentMethod paymentMethod;
     private PaymentCredential paymentCredential;
+    @ToString.Exclude
     private Map<String, Object> paymentCredentialMap;
 
     @JsonCreator
