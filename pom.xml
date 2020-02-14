@@ -12,7 +12,7 @@
 
     <groupId>com.rbkmoney.provider</groupId>
     <artifactId>googlepay</artifactId>
-    <version>1.1.7-SNAPSHOT</version>
+    <version>1.1.8-SNAPSHOT</version>
     <name>adapter-googlepay</name>
 
     <properties>
@@ -20,7 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <dockerfile.base.service.tag>c0d0900ec19c907d866f8360031a836049985110</dockerfile.base.service.tag>
         <dockerfile.registry>${env.REGISTRY}</dockerfile.registry>
-        <damsel.version>1.236-1510cd7</damsel.version>
+        <damsel.version>1.384-7dd9035</damsel.version>
         <shared.resources.version>0.3.6</shared.resources.version>
         <server.port>8022</server.port>
         <exposed.ports>${server.port}</exposed.ports>
@@ -38,11 +38,6 @@
             <groupId>com.rbkmoney.geck</groupId>
             <artifactId>common</artifactId>
             <version>0.6.9</version>
-        </dependency>
-        <dependency>
-            <groupId>com.rbkmoney.logback</groupId>
-            <artifactId>nop-rolling</artifactId>
-            <version>1.0.1</version>
         </dependency>
         <dependency>
             <groupId>com.rbkmoney</groupId>
